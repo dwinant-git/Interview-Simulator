@@ -23,7 +23,7 @@ export function JobDescriptionInput({ value, onChange }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
       });
-      if (!res.ok) throw new Error('Could not fetch URL');
+      if (!res.ok) throw new Error();
       const data = await res.json();
       onChange(data.content);
       setUrl('');
@@ -36,12 +36,13 @@ export function JobDescriptionInput({ value, onChange }: Props) {
 
   return (
     <div>
-      <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+      <span className="section-label">
         Job Description{' '}
-        <span className="text-slate-600 normal-case font-normal">(optional)</span>
-      </label>
+        <span className="normal-case font-normal text-ios-tertiary">(optional)</span>
+      </span>
 
       <div className="space-y-2">
+        {/* URL row */}
         <div className="flex gap-2">
           <input
             type="url"
@@ -49,31 +50,37 @@ export function JobDescriptionInput({ value, onChange }: Props) {
             value={url}
             onChange={e => setUrl(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleFetchUrl()}
-            className="flex-1 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder-slate-500 outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+            className="ios-input flex-1 text-[13px]"
           />
           <button
             onClick={handleFetchUrl}
             disabled={isFetching || !url.trim()}
-            className="px-3 py-2 bg-slate-700 text-slate-300 rounded-lg text-xs font-medium hover:bg-slate-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-opacity disabled:opacity-40"
+            style={{ background: '#F2F2F7', color: '#007AFF' }}
           >
             {isFetching ? '...' : 'Fetch'}
           </button>
         </div>
 
-        {fetchError && <p className="text-red-400 text-xs">{fetchError}</p>}
+        {fetchError && (
+          <p className="text-[12px]" style={{ color: '#FF3B30' }}>
+            {fetchError}
+          </p>
+        )}
 
         <textarea
           value={value}
           onChange={e => onChange(e.target.value)}
           placeholder="Or paste job description text here..."
-          rows={5}
-          className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder-slate-500 outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent resize-none"
+          rows={4}
+          className="ios-input resize-none text-[13px]"
         />
 
         {value && (
           <button
             onClick={() => onChange('')}
-            className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+            className="text-[12px] font-medium"
+            style={{ color: '#FF3B30' }}
           >
             Clear
           </button>

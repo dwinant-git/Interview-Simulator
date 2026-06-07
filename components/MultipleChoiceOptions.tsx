@@ -12,29 +12,46 @@ const LABELS = ['A', 'B', 'C', 'D'];
 
 export function MultipleChoiceOptions({ options, selectedId, onSelect }: Props) {
   return (
-    <div className="space-y-3">
+    <div className="ios-group">
       {options.map((opt, i) => {
         const isSelected = selectedId === opt.text;
         return (
           <button
             key={opt.id}
             onClick={() => onSelect(opt.text)}
-            className={`w-full text-left p-4 rounded-xl border transition-all duration-150 ${
-              isSelected
-                ? 'bg-blue-500/20 border-blue-500 text-white shadow-sm shadow-blue-500/20'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-500 hover:bg-slate-800'
-            }`}
+            className="ios-row w-full text-left transition-colors active:bg-ios-surface"
+            style={{
+              background: isSelected ? 'rgba(0,122,255,0.06)' : 'white',
+            }}
           >
-            <span
-              className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold mr-3 shrink-0 align-middle ${
-                isSelected
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-slate-700 text-slate-400'
-              }`}
-            >
-              {LABELS[i]}
-            </span>
-            <span className="text-sm leading-relaxed">{opt.text}</span>
+            <div className="flex items-start gap-3 flex-1">
+              <span
+                className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold mt-0.5"
+                style={{
+                  background: isSelected ? '#007AFF' : '#F2F2F7',
+                  color: isSelected ? 'white' : '#8E8E93',
+                }}
+              >
+                {LABELS[i]}
+              </span>
+              <span
+                className="text-[15px] leading-snug"
+                style={{ color: isSelected ? '#007AFF' : '#000000' }}
+              >
+                {opt.text}
+              </span>
+            </div>
+            {isSelected && (
+              <svg
+                className="shrink-0 ml-2 mt-0.5"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="#007AFF"
+              >
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+              </svg>
+            )}
           </button>
         );
       })}

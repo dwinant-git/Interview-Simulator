@@ -4,36 +4,114 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    --bg: #FFFFFF;
+    --text-primary: #000000;
+    --text-secondary: #8E8E93;
+    --text-tertiary: #AEAEB2;
+    --accent: #007AFF;
+    --success: #34C759;
+    --danger: #FF3B30;
+    --surface: #F2F2F7;
+    --border: #E5E5EA;
+    color-scheme: light;
   }
 
   * {
-    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    @apply bg-slate-950 text-white;
+    @apply bg-ios-bg text-ios-primary font-sans;
+    overscroll-behavior-y: contain;
   }
 
-  select option {
-    background-color: rgb(30 41 59);
-    color: white;
+  h1, h2, h3, h4 {
+    letter-spacing: -0.3px;
   }
 
+  /* iOS-style thin scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
-
   ::-webkit-scrollbar-track {
-    background: rgb(15 23 42);
+    background: transparent;
   }
-
   ::-webkit-scrollbar-thumb {
-    background: rgb(51 65 85);
-    border-radius: 3px;
+    background: var(--border);
+    border-radius: 2px;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgb(71 85 105);
+  /* Native select styling */
+  select option {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  /* Remove default focus rings, replace with iOS-style */
+  *:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* Section label — iOS uppercase small caps style */
+  .section-label {
+    @apply block text-ios-caption font-semibold uppercase text-ios-secondary tracking-[0.5px] mb-3;
+  }
+
+  /* iOS hairline divider */
+  .divider {
+    border-top: 0.5px solid var(--border);
+  }
+
+  /* iOS grouped list container */
+  .ios-group {
+    @apply bg-ios-bg rounded-xl overflow-hidden;
+    border: 0.5px solid var(--border);
+  }
+
+  /* iOS list row */
+  .ios-row {
+    @apply px-4 py-3 flex items-center justify-between;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .ios-row:last-child {
+    border-bottom: none;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply w-full py-3.5 bg-ios-accent text-white rounded-xl font-semibold text-[15px] transition-opacity active:opacity-70;
+  }
+
+  /* Secondary button */
+  .btn-secondary {
+    @apply w-full py-3.5 bg-ios-surface text-ios-accent rounded-xl font-semibold text-[15px] transition-opacity active:opacity-70;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply w-full py-3.5 text-ios-accent font-medium text-[15px] transition-opacity active:opacity-70;
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+  }
+
+  /* iOS badge/chip */
+  .ios-badge {
+    @apply text-[11px] font-semibold px-2 py-0.5 bg-ios-surface text-ios-secondary rounded;
+  }
+
+  /* iOS text input */
+  .ios-input {
+    @apply w-full px-4 py-3 bg-ios-surface rounded-xl text-ios-primary placeholder-ios-tertiary text-[15px] outline-none;
+    border: 0.5px solid transparent;
+    transition: border-color 0.15s;
+  }
+  .ios-input:focus {
+    border-color: var(--accent);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
   }
 }

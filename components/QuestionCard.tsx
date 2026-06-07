@@ -1,43 +1,62 @@
 import { Question } from '@/lib/types';
 
-const typeStyles: Record<string, string> = {
-  behavioral: 'text-purple-400 bg-purple-400/10 border-purple-400/30',
-  case: 'text-orange-400 bg-orange-400/10 border-orange-400/30',
-  situational: 'text-green-400 bg-green-400/10 border-green-400/30',
-};
-
-const difficultyStyles: Record<string, string> = {
-  Easy: 'text-emerald-400',
-  Medium: 'text-yellow-400',
-  Hard: 'text-red-400',
-};
-
 const typeLabels: Record<string, string> = {
-  behavioral: 'Behavioral (STAR)',
+  behavioral: 'STAR Method',
   case: 'Case Study',
   situational: 'Situational',
 };
 
+const typeColors: Record<string, string> = {
+  behavioral: '#007AFF',
+  case: '#FF9500',
+  situational: '#34C759',
+};
+
+const difficultyColors: Record<string, string> = {
+  Easy: '#34C759',
+  Medium: '#FF9500',
+  Hard: '#FF3B30',
+};
+
 export function QuestionCard({ question }: { question: Question }) {
   return (
-    <div className="bg-slate-800/60 border border-slate-700 rounded-xl p-6">
+    <div>
+      {/* Meta badges */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
         <span
-          className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${typeStyles[question.type]}`}
+          className="text-[11px] font-semibold px-2 py-0.5 rounded"
+          style={{
+            background: `${typeColors[question.type]}15`,
+            color: typeColors[question.type],
+          }}
         >
           {typeLabels[question.type]}
         </span>
-        <span className={`text-xs font-semibold ${difficultyStyles[question.difficulty]}`}>
+        <span
+          className="text-[11px] font-semibold px-2 py-0.5 rounded"
+          style={{
+            background: `${difficultyColors[question.difficulty]}15`,
+            color: difficultyColors[question.difficulty],
+          }}
+        >
           {question.difficulty}
         </span>
         {question.category && (
-          <span className="text-xs text-slate-500">{question.category}</span>
+          <span className="text-[11px] text-ios-secondary">{question.category}</span>
         )}
       </div>
-      <p className="text-white text-lg leading-relaxed">{question.text}</p>
+
+      {/* Question text */}
+      <p
+        className="text-ios-primary font-semibold leading-snug mb-3"
+        style={{ fontSize: '20px', letterSpacing: '-0.3px' }}
+      >
+        &ldquo;{question.text}&rdquo;
+      </p>
+
       {question.type === 'behavioral' && (
-        <p className="mt-3 text-xs text-slate-500">
-          Tip: Structure your answer using Situation → Task → Action → Result
+        <p className="text-[13px] text-ios-secondary">
+          Structure your answer: Situation → Task → Action → Result
         </p>
       )}
     </div>

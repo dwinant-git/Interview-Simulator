@@ -12,9 +12,6 @@ const experienceLevels = [
   'Executive / Director',
 ];
 
-const inputClass =
-  'w-full px-4 py-3 bg-slate-800/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-shadow';
-
 export default function OnboardingPage() {
   const router = useRouter();
   const { profile, saveProfile, isLoaded } = useUserProfile();
@@ -44,74 +41,88 @@ export default function OnboardingPage() {
   const isEdit = isLoaded && !!profile;
 
   return (
-    <main className="min-h-[calc(100vh-56px)] flex items-center justify-center px-6 py-12">
-      <div className="w-full max-w-lg">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">
-            {isEdit ? 'Update your profile' : 'Tell us about yourself'}
-          </h1>
-          <p className="text-slate-400">
-            This lets us tailor questions and feedback to your specific background.
+    <main className="bg-ios-surface min-h-screen pb-28">
+      {/* iOS large-title header */}
+      <div
+        className="px-5 pt-12 pb-5 bg-ios-bg"
+        style={{ borderBottom: '0.5px solid #E5E5EA' }}
+      >
+        <p className="text-[12px] font-semibold uppercase tracking-[0.5px] text-ios-secondary mb-1">
+          {isEdit ? 'Edit Profile' : 'Getting Started'}
+        </p>
+        <h1
+          className="font-bold text-ios-primary"
+          style={{ fontSize: '32px', letterSpacing: '-0.5px' }}
+        >
+          {isEdit ? 'Your Profile' : 'Tell us about you'}
+        </h1>
+      </div>
+
+      <form onSubmit={handleSubmit} className="px-5 pt-6 space-y-6">
+        {/* Industry */}
+        <div>
+          <span className="section-label">Industry or Field</span>
+          <input
+            type="text"
+            placeholder="e.g. Software Engineering, Finance, Marketing"
+            value={form.industry}
+            onChange={e => setForm(p => ({ ...p, industry: e.target.value }))}
+            className="ios-input"
+            required
+          />
+        </div>
+
+        {/* Experience */}
+        <div>
+          <span className="section-label">Experience Level</span>
+          <div className="ios-group">
+            {experienceLevels.map(level => {
+              const isActive = form.experienceLevel === level;
+              return (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => setForm(p => ({ ...p, experienceLevel: level }))}
+                  className="ios-row w-full text-left transition-colors"
+                  style={{ background: isActive ? 'rgba(0,122,255,0.05)' : 'white' }}
+                >
+                  <span
+                    className="text-[15px]"
+                    style={{ color: isActive ? '#007AFF' : '#000000' }}
+                  >
+                    {level}
+                  </span>
+                  {isActive && (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#007AFF">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                    </svg>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Career Goals */}
+        <div>
+          <span className="section-label">Career Goals</span>
+          <textarea
+            placeholder="e.g. Land a senior engineering role at a growth-stage startup"
+            value={form.careerGoals}
+            onChange={e => setForm(p => ({ ...p, careerGoals: e.target.value }))}
+            rows={4}
+            className="ios-input resize-none"
+            required
+          />
+          <p className="mt-2 text-[12px] text-ios-secondary">
+            Be specific — this improves question and feedback quality.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Industry or Field <span className="text-red-400">*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. Software Engineering, Product Management, Finance, Marketing"
-              value={form.industry}
-              onChange={e => setForm(p => ({ ...p, industry: e.target.value }))}
-              className={inputClass}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Experience Level <span className="text-red-400">*</span>
-            </label>
-            <select
-              value={form.experienceLevel}
-              onChange={e => setForm(p => ({ ...p, experienceLevel: e.target.value }))}
-              className={inputClass}
-            >
-              {experienceLevels.map(l => (
-                <option key={l} value={l}>
-                  {l}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Career Goals <span className="text-red-400">*</span>
-            </label>
-            <textarea
-              placeholder="e.g. Land a senior software engineering role at a growth-stage startup, focusing on backend systems"
-              value={form.careerGoals}
-              onChange={e => setForm(p => ({ ...p, careerGoals: e.target.value }))}
-              rows={4}
-              className={`${inputClass} resize-none`}
-              required
-            />
-            <p className="mt-1.5 text-xs text-slate-500">
-              Be specific — this directly improves question and feedback quality.
-            </p>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full py-3.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-400 transition-all shadow-lg shadow-blue-500/20 mt-2"
-          >
-            {isEdit ? 'Save and Practice' : 'Start Practicing'}
-          </button>
-        </form>
-      </div>
+        <button type="submit" className="btn-primary">
+          {isEdit ? 'Save and Practice' : 'Start Practicing'}
+        </button>
+      </form>
     </main>
   );
 }

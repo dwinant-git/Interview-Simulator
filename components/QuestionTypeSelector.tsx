@@ -2,10 +2,10 @@
 
 import { QuestionType } from '@/lib/types';
 
-const types: { value: QuestionType; label: string; desc: string; icon: string }[] = [
-  { value: 'behavioral', label: 'Behavioral', desc: 'STAR method · past experiences', icon: '⭐' },
-  { value: 'case', label: 'Case Study', desc: 'Analytical · problem-solving', icon: '📊' },
-  { value: 'situational', label: 'Situational', desc: 'Hypothetical scenarios', icon: '💡' },
+const types: { value: QuestionType; label: string; desc: string; color: string }[] = [
+  { value: 'behavioral', label: 'Behavioral', desc: 'STAR method · past experiences', color: '#007AFF' },
+  { value: 'case', label: 'Case Study', desc: 'Analytical · problem-solving', color: '#FF9500' },
+  { value: 'situational', label: 'Situational', desc: 'Hypothetical scenarios', color: '#34C759' },
 ];
 
 export function QuestionTypeSelector({
@@ -17,25 +17,34 @@ export function QuestionTypeSelector({
 }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-        Question Type
-      </label>
-      <div className="space-y-2">
-        {types.map(t => (
-          <button
-            key={t.value}
-            onClick={() => onChange(t.value)}
-            className={`w-full text-left px-3 py-2.5 rounded-lg border text-sm transition-colors ${
-              value === t.value
-                ? 'bg-blue-500/20 border-blue-500/60 text-white'
-                : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800'
-            }`}
-          >
-            <span className="mr-2">{t.icon}</span>
-            <span className="font-medium">{t.label}</span>
-            <span className="block text-xs text-slate-500 mt-0.5 ml-6">{t.desc}</span>
-          </button>
-        ))}
+      <span className="section-label">Question Type</span>
+      <div className="ios-group">
+        {types.map(t => {
+          const isActive = value === t.value;
+          return (
+            <button
+              key={t.value}
+              onClick={() => onChange(t.value)}
+              className="ios-row w-full text-left transition-colors active:bg-ios-surface"
+              style={{ background: isActive ? `${t.color}08` : 'white' }}
+            >
+              <div>
+                <p
+                  className="text-[15px] font-medium"
+                  style={{ color: isActive ? t.color : '#000000' }}
+                >
+                  {t.label}
+                </p>
+                <p className="text-[12px] text-ios-secondary mt-0.5">{t.desc}</p>
+              </div>
+              {isActive && (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill={t.color}>
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                </svg>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

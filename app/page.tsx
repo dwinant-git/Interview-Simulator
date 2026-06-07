@@ -2,116 +2,178 @@ import Link from 'next/link';
 
 const features = [
   {
-    icon: '⭐',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="#007AFF">
+        <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm-1 14v-4H7l5-8v4h4l-5 8z" />
+      </svg>
+    ),
     title: 'Three Question Types',
-    description:
-      'Behavioral STAR method, open-ended case studies, and situational judgment — all matched to your target role.',
+    description: 'Behavioral STAR, case studies, and situational judgment — matched to your target role.',
   },
   {
-    icon: '🤖',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="#34C759">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12l-3-3-5 5V5h16v9l-8-3v3z" />
+      </svg>
+    ),
     title: 'Streaming AI Feedback',
-    description:
-      'Submit your answer and watch real-time coaching appear — strengths, improvements, and a STAR framework breakdown.',
+    description: 'Real-time coaching on strengths, gaps, and STAR structure as you answer.',
   },
   {
-    icon: '🎯',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="#FF9500">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+      </svg>
+    ),
     title: 'Personalized to You',
-    description:
-      'Questions and feedback tailored to your industry, experience level, and career goals. Paste any job description.',
+    description: 'Questions adapt to your industry, experience level, and career goals.',
   },
 ];
 
 const steps = [
-  { step: '1', title: 'Set your profile', desc: 'Tell us your industry and goals — takes 30 seconds.' },
-  { step: '2', title: 'Generate questions', desc: 'Pick type and difficulty, optionally paste a job description.' },
-  { step: '3', title: 'Answer and get coached', desc: 'Write freely or pick from multiple choice, then get AI feedback.' },
+  { num: '1', title: 'Set your profile', body: 'Tell us your industry and goals — 30 seconds.' },
+  { num: '2', title: 'Pick your session', body: 'Choose question type, difficulty, and optionally paste a job description.' },
+  { num: '3', title: 'Answer and improve', body: 'Write or choose answers, then get instant AI coaching.' },
 ];
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="bg-ios-bg pb-24">
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center min-h-[82vh] px-6 text-center relative overflow-hidden">
-        {/* Gradient orb */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="px-5 pt-14 pb-10 text-center">
+        <span
+          className="inline-block mb-4 text-[11px] font-semibold uppercase tracking-[1px] px-3 py-1 rounded-full"
+          style={{ background: 'rgba(0,122,255,0.1)', color: '#007AFF' }}
+        >
+          Powered by Claude AI
+        </span>
+        <h1
+          className="font-bold text-ios-primary mb-4"
+          style={{ fontSize: '38px', lineHeight: '1.1', letterSpacing: '-1px' }}
+        >
+          Ace Your Next<br />Interview
+        </h1>
+        <p className="text-ios-secondary text-[17px] leading-relaxed max-w-sm mx-auto mb-8">
+          AI-generated questions and instant personalized coaching — built around your background.
+        </p>
+        <Link
+          href="/onboarding"
+          className="inline-block px-8 py-3.5 rounded-xl font-semibold text-[17px] text-white transition-opacity active:opacity-75"
+          style={{ background: '#007AFF' }}
+        >
+          Start Practicing Free
+        </Link>
+      </section>
 
-        <div className="relative">
-          <span className="inline-block mb-5 px-4 py-1.5 bg-blue-500/15 text-blue-300 rounded-full text-sm font-medium border border-blue-500/25 tracking-wide">
-            Powered by Claude AI
-          </span>
-
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.05] tracking-tight">
-            Ace Your Next<br />
-            <span className="text-blue-400">Interview</span>
-          </h1>
-
-          <p className="text-xl text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed">
-            AI-generated questions and instant personalized coaching — tailored to your role and experience level.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/onboarding"
-              className="px-8 py-3.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-400 transition-all shadow-xl shadow-blue-500/25 hover:shadow-blue-400/30"
+      {/* Illustration — iOS-style app preview mockup */}
+      <section className="px-5 mb-10">
+        <div
+          className="rounded-2xl overflow-hidden mx-auto max-w-sm"
+          style={{ border: '0.5px solid #E5E5EA', background: '#F2F2F7' }}
+        >
+          {/* Mock header */}
+          <div
+            className="px-5 pt-8 pb-4"
+            style={{ borderBottom: '0.5px solid #E5E5EA', background: 'white' }}
+          >
+            <p className="text-[12px] font-semibold uppercase tracking-[0.5px] text-ios-secondary mb-1">
+              Behavioral Prep
+            </p>
+            <p
+              className="font-semibold text-ios-primary"
+              style={{ fontSize: '17px', letterSpacing: '-0.3px' }}
             >
-              Start Practicing — It&apos;s Free
-            </Link>
-            <a
-              href="#how-it-works"
-              className="px-8 py-3.5 border border-slate-700 text-slate-300 rounded-xl font-semibold hover:border-slate-500 hover:text-white transition-all"
+              &ldquo;Tell me about a time you led a team through an unexpected challenge.&rdquo;
+            </p>
+          </div>
+          {/* Mock feedback pill */}
+          <div className="px-5 py-4 space-y-2">
+            {[
+              { label: 'Situation', done: true },
+              { label: 'Task', done: true },
+              { label: 'Action', done: false },
+              { label: 'Result', done: false },
+            ].map(item => (
+              <div key={item.label} className="flex items-center gap-3">
+                <span
+                  className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                  style={{ background: item.done ? '#34C759' : '#E5E5EA' }}
+                >
+                  {item.done && (
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="white">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                    </svg>
+                  )}
+                </span>
+                <span
+                  className="text-[13px] font-medium"
+                  style={{ color: item.done ? '#000000' : '#AEAEB2' }}
+                >
+                  {item.label}
+                </span>
+              </div>
+            ))}
+          </div>
+          {/* Mock action bar */}
+          <div
+            className="px-5 py-3 flex justify-between items-center"
+            style={{ borderTop: '0.5px solid #E5E5EA', background: 'white' }}
+          >
+            <span className="text-[12px] text-ios-secondary">Question 2 of 5</span>
+            <span
+              className="text-[12px] font-semibold px-3 py-1 rounded-full"
+              style={{ background: 'rgba(0,122,255,0.1)', color: '#007AFF' }}
             >
-              How It Works
-            </a>
+              Get Feedback →
+            </span>
           </div>
         </div>
       </section>
 
       {/* Features */}
-      <section className="max-w-5xl mx-auto px-6 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {features.map(f => (
-            <div
-              key={f.title}
-              className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors"
-            >
-              <div className="text-3xl mb-4">{f.icon}</div>
-              <h3 className="text-base font-semibold text-white mb-2">{f.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">{f.description}</p>
+      <section className="px-5 mb-10">
+        <span className="section-label">What you get</span>
+        <div className="ios-group">
+          {features.map((f, i) => (
+            <div key={i} className="ios-row gap-4">
+              <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#F2F2F7' }}>
+                {f.icon}
+              </div>
+              <div>
+                <p className="text-[15px] font-semibold text-ios-primary">{f.title}</p>
+                <p className="text-[13px] text-ios-secondary mt-0.5">{f.description}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" className="max-w-3xl mx-auto px-6 pb-24">
-        <h2 className="text-2xl font-bold text-white text-center mb-10">
-          Ready in 3 Steps
-        </h2>
-        <div className="space-y-4">
+      {/* Steps */}
+      <section className="px-5 mb-10">
+        <span className="section-label">How it works</span>
+        <div className="space-y-3">
           {steps.map(s => (
-            <div
-              key={s.step}
-              className="flex items-start gap-5 bg-slate-900/40 border border-slate-800 rounded-xl p-5"
-            >
-              <span className="flex-shrink-0 w-9 h-9 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-sm font-bold border border-blue-500/30">
-                {s.step}
+            <div key={s.num} className="flex gap-4 items-start">
+              <span
+                className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold text-white mt-0.5"
+                style={{ background: '#007AFF' }}
+              >
+                {s.num}
               </span>
               <div>
-                <h3 className="text-white font-semibold mb-1">{s.title}</h3>
-                <p className="text-slate-400 text-sm">{s.desc}</p>
+                <p className="text-[15px] font-semibold text-ios-primary">{s.title}</p>
+                <p className="text-[13px] text-ios-secondary">{s.body}</p>
               </div>
             </div>
           ))}
         </div>
+      </section>
 
-        <div className="text-center mt-10">
-          <Link
-            href="/onboarding"
-            className="inline-block px-8 py-3.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-400 transition-all shadow-lg shadow-blue-500/25"
-          >
-            Get Started
-          </Link>
-        </div>
+      {/* CTA */}
+      <section className="px-5">
+        <Link href="/onboarding" className="btn-primary block text-center">
+          Get Started
+        </Link>
       </section>
     </main>
   );

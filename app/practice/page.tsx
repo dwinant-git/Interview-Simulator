@@ -20,12 +20,15 @@ const initialSession: SessionState = {
   difficulty: 'Medium',
 };
 
+type View = 'config' | 'question';
+
 export default function PracticePage() {
   const router = useRouter();
   const { profile, isLoaded } = useUserProfile();
   const [session, setSession] = useState<SessionState>(initialSession);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [view, setView] = useState<View>('config');
 
   useEffect(() => {
     if (isLoaded && !profile) router.push('/onboarding');
@@ -70,6 +73,7 @@ export default function PracticePage() {
         answerModes: {},
         feedbackHistory: {},
       }));
+      setView('question');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
@@ -100,22 +104,51 @@ export default function PracticePage() {
     }));
   };
 
-  const progress =
-    session.questions.length > 0
-      ? ((session.currentQuestionIndex + 1) / session.questions.length) * 100
-      : 0;
-
   if (!isLoaded || !profile) return null;
 
-  return (
-    <div className="flex h-[calc(100vh-56px)] overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-72 shrink-0 bg-slate-900/80 border-r border-slate-800 flex flex-col overflow-y-auto">
-        <div className="p-5 space-y-6 flex-1">
-          <div className="text-xs text-slate-500 bg-slate-800/60 rounded-lg px-3 py-2 border border-slate-700">
-            Practicing as:{' '}
-            <span className="text-slate-300 font-medium">{profile.industry}</span> ·{' '}
-            <span className="text-slate-400">{profile.experienceLevel}</span>
+  /* ── Config view ── */
+  if (view === 'config') {
+    return (
+      <main className="bg-ios-surface min-h-screen pb-28">
+        {/* Header */}
+        <div
+          className="px-5 pt-12 pb-5 bg-ios-bg"
+          style={{ borderBottom: '0.5px solid #E5E5EA' }}
+        >
+          <div className="flex items-center justify-between mb-1">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.5px] text-ios-secondary">
+              Session Setup
+            </p>
+            {session.questions.length > 0 && (
+              <button
+                onClick={() => setView('question')}
+                className="text-[15px] font-medium"
+                style={{ color: '#007AFF' }}
+              >
+                Resume
+              </button>
+            )}
+          </div>
+          <h1
+            className="font-bold text-ios-primary"
+            style={{ fontSize: '32px', letterSpacing: '-0.5px' }}
+          >
+            Practice
+          </h1>
+        </div>
+
+        <div className="px-5 pt-6 space-y-6">
+          {/* Profile chip */}
+          <div
+            className="flex items-center gap-2 px-3 py-2 rounded-xl"
+            style={{ background: 'rgba(0,122,255,0.08)' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#007AFF">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+            </svg>
+            <p className="text-[12px] font-medium" style={{ color: '#007AFF' }}>
+              {profile.industry} · {profile.experienceLevel}
+            </p>
           </div>
 
           <QuestionTypeSelector
@@ -132,72 +165,90 @@ export default function PracticePage() {
             value={session.jobDescription ?? ''}
             onChange={v => setSession(p => ({ ...p, jobDescription: v }))}
           />
-        </div>
 
-        <div className="p-5 border-t border-slate-800">
           <button
             onClick={handleGenerate}
             disabled={isGenerating}
-            className="w-full py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
+            className="btn-primary flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                 Generating...
               </>
             ) : (
-              <>Generate Questions</>
+              'Generate Questions'
             )}
           </button>
 
           {error && (
-            <p className="mt-3 text-red-400 text-xs text-center">{error}</p>
+            <p className="text-[13px] text-center" style={{ color: '#FF3B30' }}>
+              {error}
+            </p>
           )}
         </div>
-      </aside>
+      </main>
+    );
+  }
 
-      {/* Main */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-8">
-          {!currentQuestion ? (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="w-20 h-20 bg-slate-800/60 rounded-2xl flex items-center justify-center text-4xl mb-5 border border-slate-700">
-                💬
-              </div>
-              <h2 className="text-xl font-bold text-white mb-2">Ready to Practice?</h2>
-              <p className="text-slate-400 max-w-xs text-sm leading-relaxed">
-                Configure your session in the sidebar — choose a question type, difficulty, and
-                optionally add a job description — then click Generate.
-              </p>
-            </div>
-          ) : (
-            <div className="max-w-2xl mx-auto space-y-5">
-              {/* Progress header */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-400">
-                  Question{' '}
-                  <span className="text-white font-medium">{session.currentQuestionIndex + 1}</span>{' '}
-                  of {session.questions.length}
-                </span>
-                <div className="flex gap-1">
-                  {session.questions.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setSession(p => ({ ...p, currentQuestionIndex: i }))}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        i === session.currentQuestionIndex
-                          ? 'bg-blue-400'
-                          : session.answers[session.questions[i].id]
-                            ? 'bg-slate-500'
-                            : 'bg-slate-700'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
+  /* ── Question view ── */
+  return (
+    <main className="bg-ios-bg min-h-screen pb-28">
+      {/* Sticky question header */}
+      <div
+        className="sticky top-0 z-10 px-5 pt-12 pb-4 bg-ios-bg"
+        style={{ borderBottom: '0.5px solid #E5E5EA' }}
+      >
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setView('config')}
+            className="text-[15px] font-medium"
+            style={{ color: '#007AFF' }}
+          >
+            ← Setup
+          </button>
 
+          {/* Dot progress */}
+          <div className="flex gap-1.5 items-center">
+            {session.questions.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSession(p => ({ ...p, currentQuestionIndex: i }))}
+                className="rounded-full transition-all"
+                style={{
+                  width: i === session.currentQuestionIndex ? '16px' : '7px',
+                  height: '7px',
+                  background:
+                    i === session.currentQuestionIndex
+                      ? '#007AFF'
+                      : session.answers[session.questions[i].id]
+                        ? '#8E8E93'
+                        : '#E5E5EA',
+                }}
+              />
+            ))}
+          </div>
+
+          <span className="text-[13px] text-ios-secondary font-medium">
+            {session.currentQuestionIndex + 1}/{session.questions.length}
+          </span>
+        </div>
+      </div>
+
+      <div className="px-5 pt-6 space-y-6">
+        {currentQuestion && (
+          <>
+            {/* Question card */}
+            <div
+              className="rounded-2xl p-5 bg-ios-bg"
+              style={{ border: '0.5px solid #E5E5EA' }}
+            >
               <QuestionCard question={currentQuestion} />
+            </div>
 
+            {/* Answer input */}
+            <div>
+              <span className="section-label">Your Answer</span>
               <AnswerInput
                 question={currentQuestion}
                 answerMode={currentMode}
@@ -216,47 +267,44 @@ export default function PracticePage() {
                   }))
                 }
               />
-
-              {/* Nav row */}
-              <div className="flex items-center justify-between pt-2">
-                <button
-                  onClick={() => goTo(-1)}
-                  disabled={session.currentQuestionIndex === 0}
-                  className="px-4 py-2 text-sm text-slate-400 hover:text-white disabled:opacity-30 transition-colors"
-                >
-                  ← Previous
-                </button>
-
-                <button
-                  onClick={handleSubmitAnswer}
-                  disabled={!currentAnswer.trim()}
-                  className="px-7 py-2.5 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-lg shadow-emerald-600/20"
-                >
-                  Get AI Feedback →
-                </button>
-
-                <button
-                  onClick={() => goTo(1)}
-                  disabled={session.currentQuestionIndex === session.questions.length - 1}
-                  className="px-4 py-2 text-sm text-slate-400 hover:text-white disabled:opacity-30 transition-colors"
-                >
-                  Skip →
-                </button>
-              </div>
             </div>
-          )}
-        </div>
 
-        {/* Progress bar */}
-        {session.questions.length > 0 && (
-          <div className="h-0.5 bg-slate-800">
-            <div
-              className="h-full bg-blue-500 transition-all duration-500"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+            {/* Action row */}
+            <div className="flex gap-3 pt-1">
+              <button
+                onClick={() => goTo(-1)}
+                disabled={session.currentQuestionIndex === 0}
+                className="flex-none w-11 h-11 rounded-xl flex items-center justify-center transition-opacity disabled:opacity-30"
+                style={{ background: '#F2F2F7' }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#8E8E93">
+                  <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+                </svg>
+              </button>
+
+              <button
+                onClick={handleSubmitAnswer}
+                disabled={!currentAnswer.trim()}
+                className="flex-1 py-3 rounded-xl font-semibold text-[15px] text-white transition-opacity disabled:opacity-40"
+                style={{ background: '#34C759' }}
+              >
+                Get AI Feedback
+              </button>
+
+              <button
+                onClick={() => goTo(1)}
+                disabled={session.currentQuestionIndex === session.questions.length - 1}
+                className="flex-none w-11 h-11 rounded-xl flex items-center justify-center transition-opacity disabled:opacity-30"
+                style={{ background: '#F2F2F7' }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#8E8E93">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+              </button>
+            </div>
+          </>
         )}
       </div>
-    </div>
+    </main>
   );
 }

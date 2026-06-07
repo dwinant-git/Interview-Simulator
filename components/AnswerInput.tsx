@@ -22,8 +22,12 @@ export function AnswerInput({
 
   return (
     <div className="space-y-4">
+      {/* Mode toggle — iOS segmented control */}
       {hasMC && (
-        <div className="flex gap-2">
+        <div
+          className="flex p-0.5 rounded-lg"
+          style={{ background: '#E5E5EA' }}
+        >
           {(['free-form', 'multiple-choice'] as AnswerMode[]).map(mode => (
             <button
               key={mode}
@@ -31,13 +35,14 @@ export function AnswerInput({
                 onAnswerModeChange(mode);
                 onChange('');
               }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                answerMode === mode
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
-              }`}
+              className="flex-1 py-1.5 rounded-md text-[13px] font-semibold transition-all"
+              style={{
+                background: answerMode === mode ? 'white' : 'transparent',
+                color: answerMode === mode ? '#000000' : '#8E8E93',
+                boxShadow: answerMode === mode ? '0 1px 3px rgba(0,0,0,0.12)' : 'none',
+              }}
             >
-              {mode === 'free-form' ? 'Write Your Answer' : 'Multiple Choice'}
+              {mode === 'free-form' ? 'Write Answer' : 'Multiple Choice'}
             </button>
           ))}
         </div>
@@ -53,7 +58,7 @@ export function AnswerInput({
               : 'Type your answer here...'
           }
           rows={9}
-          className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-sm leading-relaxed"
+          className="ios-input resize-none"
         />
       ) : (
         <MultipleChoiceOptions
